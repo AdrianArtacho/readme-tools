@@ -1,37 +1,51 @@
 # readme-tools
 
-2) Add it to any meta-repo
+A lightweight, dependency-free utility to automatically generate and update a **Submodules Table** inside your meta-repository’s `README.md`.
+
+This tool scans all submodules listed in your `.gitmodules` file and rebuilds a three-column table:
+
+| Name | Description | Preview |
+| --- | --- | :---: |
+
+It pulls a short description from each submodule’s local `README.md` and (if available) a small GUI image from `img/gui.png`.
+
+---
+
+## Features
+
+- 🧠 **Auto-detects the superproject root**  
+  Works both when run from the meta-repo or from within the `readme-tools` submodule itself.
+
+- ⚡ **Fast and offline**  
+  No network calls — unreachable repos or missing images are silently skipped.
+
+- 🖼️ **Live previews**  
+  GitHub/GitLab submodules automatically show images from their latest `HEAD` commit.
+
+- 🧹 **Self-excluding**  
+  The `readme-tools` submodule itself is never listed in the generated table.
+
+---
+
+## Installation
+
+Clone or add the submodule to your meta-repo:
+
+```bash
 git submodule add -b main https://github.com/yourname/readme-tools tools/readme-tools
 git submodule update --init --recursive
-
-3) Run from the meta-repo root
-python tools/readme-tools/update_table.py  # fast, zero-network table builder
+```
 
 ---
 
-Drop-in script (works from a submodule)
-
-It detects the superproject root via git rev-parse --show-toplevel from the current working directory, so it updates that repo’s README.md, not the tools submodule.
-
-No network calls; it skips unreachable repos or missing images (cell shows –).
-
-Uses HEAD raw URLs for GitHub/GitLab so images render and stay up to date.
-
----
-
-How to run
-
-From the meta-repo root (your original way):
+## create a virtual environment inside the submodule
 
 ```bash
-python readme-tools/update_table.py
-```
+cd tools/readme-tools
 
-From inside the submodule folder (your new request):
+# create venv (MacOS)
+python3 -m venv .venv 
 
-```bash
-cd readmi-tools
-python update_table.py
-```
-
-The function above will detect the superproject and update <meta-repo>/README.md there.
+# activate it (MacOS)
+source .venv/bin/activate
+````

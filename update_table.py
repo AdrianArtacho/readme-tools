@@ -119,7 +119,11 @@ def raw_url_head(info: dict[str, str]) -> Optional[str]:
 
 def build_table(root: Path) -> str:
     subs = parse_gitmodules(root)
-    subs = sorted(subs, key=lambda d: Path(d["path"]).name.lower())
+    # Sort and exclude internal utility submodules like 'readme-tools'
+    subs = sorted(
+        [s for s in subs if Path(s["path"]).name not in {"readme-tools", "README-TOOLS"}],
+        key=lambda d: Path(d["path"]).name.lower()
+    )
     rows = []
     for sm in subs:
         rel_path = sm["path"]
