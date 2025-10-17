@@ -32,7 +32,23 @@ def sh(args: list[str], cwd: Optional[Path] = None) -> str:
         .decode("utf-8", "replace").strip()
 
 def repo_root_from_cwd() -> Path:
-    # Determine the top-level of the repo for the CURRENT working directory
+    """
+    If we're inside a submodule, return the *superproject* root.
+    Otherwise, return the current repo's toplevel.
+    """
+    def sh(args, cwd=None):
+        import subprocess
+        return subprocess.check_output(args, cwd=cwd).decode("utf-8", "replace").strip()
+
+    # 1) If run inside a submodule, Git will tell us the superproject path.
+    try:
+        sp = sh(["git", "rev-parse", "--show-superproject-working-tree"])
+        if sp:
+            return Path(sp).resolve()
+    except Exception:
+        pass
+
+    # 2) Fallback: normal repo toplevel.
     top = sh(["git", "rev-parse", "--show-toplevel"])
     return Path(top).resolve()
 

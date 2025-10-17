@@ -16,3 +16,22 @@ It detects the superproject root via git rev-parse --show-toplevel from the curr
 No network calls; it skips unreachable repos or missing images (cell shows –).
 
 Uses HEAD raw URLs for GitHub/GitLab so images render and stay up to date.
+
+---
+
+How to run
+
+From the meta-repo root (your original way):
+
+```bash
+python readme-tools/update_table.py
+```
+
+From inside the submodule folder (your new request):
+
+```bash
+cd readmi-tools
+python update_table.py
+```
+
+The function above will detect the superproject and update <meta-repo>/README.md there.
